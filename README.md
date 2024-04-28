@@ -10,6 +10,12 @@ Este script em Python captura uma captura de tela de página inteira de uma URL 
 - ReportLab
 - WebDriver Manager
 
+Use o comando `git clone` seguido da URL do repositório para clonar o código-fonte para sua máquina local.
+
+```bash
+git clone https://github.com/vhsmdev/savewebpage.git
+```
+
 Instale as dependências usando pip:
 
 ```bash
