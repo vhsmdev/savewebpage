@@ -1,6 +1,6 @@
 ### Captura de Tela de Página Inteira e Conversor para PDF
 
-Este script em Python captura uma captura de tela de página inteira de uma URL fornecida usando o Selenium WebDriver e, opcionalmente, converte a captura de tela para PDF ou PNG.
+Este script em Python efetua uma captura de tela em uma página inteira de uma URL fornecida usando o Selenium WebDriver e, opcionalmente, converte a captura de tela para PDF ou PNG.
 
 #### Dependências
 
