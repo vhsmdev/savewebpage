@@ -21,7 +21,7 @@ pip install selenium Pillow reportlab webdriver_manager
 Execute o script a partir da linha de comando com os seguintes argumentos:
 
 ```bash
-python main.py <url> <output_formato> [--output <caminho_saida>]
+python savepage.py <url> <output_formato> [--output <caminho_saida>]
 ```
 
 - `<url>`: URL da página da web que será capturada.
@@ -33,19 +33,19 @@ python main.py <url> <output_formato> [--output <caminho_saida>]
 Capturar uma captura de tela de página inteira de `https://example.com` e salvar como PDF:
 
 ```bash
-python main.py https://example.com pdf
+python savepage.py https://example.com pdf
 ```
 
 Capturar uma captura de tela de página inteira de `https://example.com` e salvar como PNG:
 
 ```bash
-python main.py https://example.com png
+python savepage.py https://example.com png
 ```
 
 Especificar um caminho de saída personalizado (sem extensão):
 
 ```bash
-python main.py https://example.com pdf --output minha_captura
+python savepage.py https://example.com pdf --output minha_captura
 ```
 
 #### Detalhes do Script
