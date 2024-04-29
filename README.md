@@ -67,4 +67,6 @@ python savepage.py https://example.com pdf --output minha_captura
 - O script requer uma conexão com a internet para baixar o WebDriver necessário.
 - Ajuste o tamanho da janela (`driver.set_window_size()`) de acordo com suas necessidades para capturar toda a página.
 
-Agradeço suas contribuições para melhorar este projeto e ficamos ansiosos para revisar suas propostas de melhoria!
+## Contribuição ✨
+
+Ajude a comunidade tornando este projeto ainda mais incrível. Leia como contribuir clicando **[aqui](https://github.com/vhsmdev/savewebpage/blob/main/CONTRIBUTING.md)**. Estou convencido de que juntos alcançaremos coisas incríveis!
