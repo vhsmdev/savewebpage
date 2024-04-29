@@ -70,3 +70,8 @@ python savepage.py https://example.com pdf --output minha_captura
 ## Contribuição ✨
 
 Ajude a comunidade tornando este projeto ainda mais incrível. Leia como contribuir clicando **[aqui](https://github.com/vhsmdev/savewebpage/blob/main/CONTRIBUTING.md)**. Estou convencido de que juntos alcançaremos coisas incríveis!
+
+### Membros da comunidade que já contribuiram:
+<a href="https://github.com/vhsmdev/savewebpage/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vhsmdev/savewebpage"/>
+</a>
