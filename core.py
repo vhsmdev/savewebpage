@@ -12,10 +12,10 @@ class DefaultSystem:
     configurações específicas do sistema, como o navegador padrão.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.system = system()
 
-    def get_default_browser(self):
+    def get_default_browser(self) -> str:
         """
         Obtém o navegador padrão do sistema.
 
@@ -41,10 +41,11 @@ class Browser(DefaultSystem):
     Herda de DefaultSystem para acessar as configurações padrão do sistema.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
+        self.browser_name = self.get_default_browser().lower()
 
-    def get_local_path(self):
+    def get_local_path(self) -> str:
         """
         Obtém o diretório atual.
 
@@ -53,31 +54,7 @@ class Browser(DefaultSystem):
         """
         return getcwd()
 
-
-class Printer:
-    """
-    Classe para imprimir uma URL.
-
-    Utiliza o navegador padrão do sistema para renderizar a URL e imprimir em PDF.
-    """
-
-    def __init__(self):
-        self.browser = Browser()
-        self.browser_name = self.browser.get_default_browser().lower()
-
-    def Print_url(self, url, filename):
-        """
-        Imprime uma URL para um arquivo PDF.
-
-        Args:
-            url (str): A URL a ser impressa.
-            filename (str): O nome do arquivo PDF de saída.
-        """
-        _cli = self.instant_render(url, filename)
-        _cli = " ".join(_cli)
-        cli(f"start {_cli}")
-
-    def instant_render(self, url, filename):
+    def instant_render(self, url, filename) -> list:
         """
         Prepara os parâmetros para renderizar a URL para PDF.
 
@@ -91,11 +68,11 @@ class Printer:
         return [self.choose_browser(),
                 "--headless",
                 "--disable-gpu",
-                f"--print-to-pdf={self.browser.get_local_path()+sep+filename}.pdf",
+                f"--print-to-pdf={self.get_local_path()+sep+filename}.pdf",
                 url,
                 ]
 
-    def choose_browser(self):
+    def choose_browser(self) -> str:
         """
         Escolhe o navegador a ser utilizado para renderizar a URL.
 
@@ -106,3 +83,26 @@ class Printer:
             if browser in self.browser_name:
                 return browser
         return ""
+
+
+class Printer:
+    """
+    Classe para imprimir uma URL.
+
+    Utiliza o navegador padrão do sistema para renderizar a URL e imprimir em PDF.
+    """
+
+    def __init__(self) -> None:
+        self.browser = Browser()
+
+    def Print_url(self, url, filename) -> None:
+        """
+        Imprime uma URL para um arquivo PDF.
+
+        Args:
+            url (str): A URL a ser impressa.
+            filename (str): O nome do arquivo PDF de saída.
+        """
+        _cli = self.browser.instant_render(url, filename)
+        _cli = " ".join(_cli)
+        cli(f"start {_cli}")
