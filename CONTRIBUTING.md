@@ -11,4 +11,4 @@ Este é um projeto totalmente livre que aceita contribuições via pull requests
 
 ## Recomendação (opcional)
 
-Para uma melhor semântica nos commits, recomendamos nosso repositório sobre [padrões de commits](https://github.com/iuricode/padroes-de-commits). Assim ficará mais fácil para avaliar seu pull request.
+Para uma melhor semântica nos commits, recomendamos nosso repositório sobre [padrões de commits](https://github.com/vhsmdev/padroes-de-commits). Assim ficará mais fácil para avaliar seu pull request.
