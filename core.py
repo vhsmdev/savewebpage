@@ -1,108 +1,64 @@
-from os import getcwd, sep
-from os import system as cli
-from platform import system
-from subprocess import check_output
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from PIL import Image
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from webdriver_manager.chrome import ChromeDriverManager
 
 
-class DefaultSystem:
-    """
-    Classe base para determinar configurações padrão do sistema.
+def save_page(url, output_path, output_format):
+    # Configurar as opções do Chrome para capturar a captura de tela
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument('--headless')  # Executar o navegador em modo headless (sem janela visível)
+    chrome_options.add_argument("--log-level=3") # Remover mensagens de baixo nivel do Chrome
 
-    Obtém o sistema operacional atual e fornece métodos para acessar
-    configurações específicas do sistema, como o navegador padrão.
-    """
+    chrome_service = ChromeService(ChromeDriverManager().install())
 
-    def __init__(self):
-        self.system = system()
+    try:
+        # Iniciar o driver do Chrome
+        with webdriver.Chrome(service=chrome_service, options=chrome_options) as driver:
+            # Carregar a página da web
+            driver.get(url)
+            
+            # Esperar até que a página esteja totalmente carregada
+            driver.implicitly_wait(10)  # Espera implícita por até 10 segundos
 
-    def get_default_browser(self):
-        """
-        Obtém o navegador padrão do sistema.
+            # Obter a altura total da página
+            total_height = driver.execute_script("return document.body.scrollHeight")
 
-        Retorna:
-            str: O nome do navegador padrão.
-        """
-        if self.system == 'Windows':
-            _cli = ['powershell',
-                    r'(Get-ItemProperty "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice").ProgId',
-                    ]
-        elif self.system == 'Darwin':
-            _cli = ...  # Comando para macOS (ainda precisa ser implementado)
-        elif self.system == 'Linux':
-            _cli = ...  # Comando para Linux (ainda precisa ser implementado)
+            # Rolar até o final da página
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(3)  # Aguardar um breve intervalo após rolar até o final
 
-        return check_output(_cli).decode().strip()
+            # Rolar de volta para o topo da página
+            driver.execute_script("window.scrollTo(0, 0);")
 
+            # Definir a altura da janela de visualização como a altura total da página para capturar toda a página
+            driver.set_window_size(1200, total_height)  # Ajuste conforme necessário
 
-class Browser(DefaultSystem):
-    """
-    Classe para obter informações específicas do navegador.
+            # Capturar uma captura de tela da página
+            screenshot = driver.get_screenshot_as_png()
+            img = Image.open(BytesIO(screenshot))
 
-    Herda de DefaultSystem para acessar as configurações padrão do sistema.
-    """
+            if output_format == 'pdf':
+                # Converter a captura de tela para PDF
+                convert_to_pdf(img, f"{output_path}.pdf")
+                print(f"Captura de tela convertida para PDF: {output_path}.pdf")
+            elif output_format == 'png':
+                # Salvar a captura de tela como PNG
+                img.save(f"{output_path}.png")
+                print(f"Captura de tela da página inteira salva como: {output_path}.png")
 
-    def __init__(self):
-        super().__init__()
-
-    def get_local_path(self):
-        """
-        Obtém o diretório atual.
-
-        Retorna:
-            str: O caminho para o diretório atual.
-        """
-        return getcwd()
+    except Exception as e:
+        print(f"Erro ao capturar a captura de tela da página inteira: {e}")
 
 
-class Printer:
-    """
-    Classe para imprimir uma URL.
+def convert_to_pdf(image, output_path):
+    # Criar um documento PDF usando reportlab
+    c = canvas.Canvas(output_path, pagesize=(image.width, image.height))
+    c.drawInlineImage(image, 0, 0, width=image.width, height=image.height)
+    c.save()
 
-    Utiliza o navegador padrão do sistema para renderizar a URL e imprimir em PDF.
-    """
-
-    def __init__(self):
-        self.browser = Browser()
-        self.browser_name = self.browser.get_default_browser().lower()
-
-    def Print_url(self, url, filename):
-        """
-        Imprime uma URL para um arquivo PDF.
-
-        Args:
-            url (str): A URL a ser impressa.
-            filename (str): O nome do arquivo PDF de saída.
-        """
-        _cli = self.instant_render(url, filename)
-        _cli = " ".join(_cli)
-        cli(f"start {_cli}")
-
-    def instant_render(self, url, filename):
-        """
-        Prepara os parâmetros para renderizar a URL para PDF.
-
-        Args:
-            url (str): A URL a ser impressa.
-            filename (str): O nome do arquivo PDF de saída.
-
-        Returns:
-            list: Lista de argumentos para a linha de comando.
-        """
-        return [self.choose_browser(),
-                "--headless",
-                "--disable-gpu",
-                f"--print-to-pdf={self.browser.get_local_path()+sep+filename}.pdf",
-                url,
-                ]
-
-    def choose_browser(self):
-        """
-        Escolhe o navegador a ser utilizado para renderizar a URL.
-
-        Retorna:
-            str: O nome do navegador escolhido.
-        """
-        for browser in ["brave", "chrome", "firefox"]:
-            if browser in self.browser_name:
-                return browser
-        return ""
