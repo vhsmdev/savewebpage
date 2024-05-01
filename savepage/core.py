@@ -1,4 +1,3 @@
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -31,7 +30,6 @@ def save_page(url, output_path, output_format):
 
             # Rolar até o final da página
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(3)  # Aguardar um breve intervalo após rolar até o final
 
             # Rolar de volta para o topo da página
             driver.execute_script("window.scrollTo(0, 0);")
