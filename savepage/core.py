@@ -1,24 +1,19 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from PIL import Image
 from io import BytesIO
-from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from webdriver_manager.chrome import ChromeDriverManager
-
 
 def save_page(url, output_path, output_format):
-    # Configurar as opções do Chrome para capturar a captura de tela
     chrome_options = ChromeOptions()
-    chrome_options.add_argument('--headless')  # Executar o navegador em modo headless (sem janela visível)
-    chrome_options.add_argument("--log-level=3") # Remover mensagens de baixo nivel do Chrome
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument("--log-level=3")
 
-    chrome_service = ChromeService(ChromeDriverManager().install())
+    service = Service()
 
     try:
-        # Iniciar o driver do Chrome
-        with webdriver.Chrome(service=chrome_service, options=chrome_options) as driver:
+        with webdriver.Chrome(service=service, options=chrome_options) as driver:
             # Carregar a página da web
             driver.get(url)
             
@@ -53,10 +48,8 @@ def save_page(url, output_path, output_format):
     except Exception as e:
         print(f"Erro ao capturar a captura de tela da página inteira: {e}")
 
-
 def convert_to_pdf(image, output_path):
     # Criar um documento PDF usando reportlab
     c = canvas.Canvas(output_path, pagesize=(image.width, image.height))
     c.drawInlineImage(image, 0, 0, width=image.width, height=image.height)
     c.save()
-
